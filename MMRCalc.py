@@ -70,14 +70,40 @@ def GetInput() -> 'tuple[set[str],list[Game]]':
                 
     return (allPlayers, games)
 
+def GetStartingElos(playerDict: 'dict[str,Player]'):
+    if not exists('startingElo.txt'):
+        return
+    
+    lines = []
+    with open('startingElo.txt') as startingEloFile:
+        lines = startingEloFile.readlines()
+        
+    for line in lines:
+        line = line.strip()
+        if line.startswith("//"):
+            continue
+        
+        columns = line.split(',')
+        
+        if len(columns) != 2:
+            print('startingElo.txt columns are invalid')
+            continue
+        
+        playerName = columns[0]
+        if playerName not in playerDict:
+            playerDict[playerName] = Player(playerName)
+            print('Adding player from startingElo.txt: \"' + playerName + '\"')
+        
+        playerDict[playerName].elo = int(columns[1])
+
 def AverageTeamElo(teamElos: 'list[Player]'):
     total = 0
     for player in teamElos:
         total += player.elo
     return total / len(teamElos)
 
-def Probability(rating1: int, rating2: int):
-    return 1.0 * 1.0 / (1 + 1.0 * pow(10, 1.0 * (rating1 - rating2) / 400))
+def Probability(me: int, opponent: int):
+    return 1.0 * 1.0 / (1 + 1.0 * pow(10, 1.0 * (opponent - me) / 400))
 
 def EloFunc1v1(me: Player, opponent: Player, result: bool) -> int:
     K = 50
@@ -112,6 +138,7 @@ def BuildPlayerHistory(players: 'set[str]', gameHistory: 'list[Game]') -> 'dict[
     playersDict: dict[str,Player] = {}
     for player in players:
         playersDict[player] = Player(player)
+    GetStartingElos(playersDict)
     
     for game in gameHistory:
         if len(game.team1) == 1:
@@ -158,6 +185,7 @@ def Output(playerDict: 'dict[str,Player]'):
 
 def main():
     players, games = GetInput()
+    
     playerDict = BuildPlayerHistory(players, games)
     Output(playerDict)
     
