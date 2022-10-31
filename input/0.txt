@@ -1,0 +1,5 @@
+b,f
+se,st,b,f
+b,se
+b,st
+st,f,b,se
