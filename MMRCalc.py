@@ -80,7 +80,7 @@ def Probability(rating1: int, rating2: int):
     return 1.0 * 1.0 / (1 + 1.0 * pow(10, 1.0 * (rating1 - rating2) / 400))
 
 def EloFunc1v1(me: Player, opponent: Player, result: bool) -> int:
-    K = 30
+    K = 50
     probIWin = Probability(me.elo, opponent.elo)
     
     if result:
@@ -89,7 +89,7 @@ def EloFunc1v1(me: Player, opponent: Player, result: bool) -> int:
         return me.elo + K * (0 - probIWin)
 
 def EloFunc2v2(myTeam: 'list[Player]', opponentTeam: 'list[Player]', result: bool) -> 'list[int]':
-    K = 30
+    K = 50
     S = 0.6 # Percentage that my own rating should factor into elo gain
     
     opponentTeamElo = AverageTeamElo(opponentTeam)
