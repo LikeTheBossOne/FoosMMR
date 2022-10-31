@@ -65,6 +65,7 @@ def GetInput() -> 'tuple[set[str],list[Game]]':
                             team2.append(player)
                         if not player in allPlayers:
                             allPlayers.add(player)
+                            print("Adding player: \"" + player + "\"")
                     games.append(Game(team1, team2))
                 
     return (allPlayers, games)
@@ -148,7 +149,8 @@ def Output(playerDict: 'dict[str,Player]'):
     outPath = originalOutPath + ".txt"
     count = 1
     while exists(outPath):
-        outPath = originalOutPath + "_" + count + ".txt"
+        outPath = originalOutPath + "_" + str(count) + ".txt"
+        count += 1
     
     with open(outPath, 'w') as outFile:
         for playerName, player in playerDict.items():
