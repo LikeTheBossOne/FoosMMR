@@ -14,6 +14,8 @@ st,f,b,se
 ```
 - To run, simply run the batch file. This only works on work PCs. Unlucky otherwise :D
 - Output files will be filled into the output Dir. These are given the name of the date they were created, followed by an ascending number if multiple files were done on the same date. These are in the format `<player>, <elo>, <wins>, <totalGames>`
+
+0.txt EX)
 ```
 b, 1016.4282617770239, 3, 5
 st, 1014.0942452472536, 2, 3
