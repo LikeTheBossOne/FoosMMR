@@ -107,12 +107,13 @@ def Probability(me: int, opponent: int):
 
 def EloFunc1v1(me: Player, opponent: Player, result: bool) -> int:
     K = 50
+    timePassedBalance = K**(1 - (0.005 * min(30, me.totalGames)))
     probIWin = Probability(me.elo, opponent.elo)
     
     if result:
-        return me.elo + K * (1 - probIWin)
+        return me.elo + timePassedBalance * (1 - probIWin)
     else:
-        return me.elo + K * (0 - probIWin)
+        return me.elo + timePassedBalance * (0 - probIWin)
 
 def EloFunc2v2(myTeam: 'list[Player]', opponentTeam: 'list[Player]', result: bool) -> 'list[int]':
     K = 50
@@ -128,10 +129,12 @@ def EloFunc2v2(myTeam: 'list[Player]', opponentTeam: 'list[Player]', result: boo
     outElos = []
     if result:
         for idx, player in enumerate(myTeam):
-            outElos.append(player.elo + K * (1 - (S * teamPlayersWinProb[idx] + (1 - S) * probMyTeamWins)))
+            timePassedBalance = K**(1 - (0.005 * min(30, player.totalGames)))
+            outElos.append(player.elo + timePassedBalance * (1 - (S * teamPlayersWinProb[idx] + (1 - S) * probMyTeamWins)))
     else:
         for idx, player in enumerate(myTeam):
-            outElos.append(player.elo + K * (0 - (S * teamPlayersWinProb[idx] + (1 - S) * probMyTeamWins)))
+            timePassedBalance = K**(1 - (0.005 * min(30, player.totalGames)))
+            outElos.append(player.elo + timePassedBalance * (0 - (S * teamPlayersWinProb[idx] + (1 - S) * probMyTeamWins)))
     return outElos
 
 def BuildPlayerHistory(players: 'set[str]', gameHistory: 'list[Game]') -> 'dict[str,Player]':
